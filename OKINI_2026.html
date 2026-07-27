@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OKINI - Cafeter�a del barrio & Kyoto Drip</title>
+    <!-- Tailwind CSS para dise�o r�pido y moderno -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons para iconograf�a elegante -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #FAF6F0; /* Beige muy suave tradicional */
+            color: #2C2520; /* Marr�n oscuro c�lido */
+        }
+        h1, h2, h3, .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+        /* Custom scrollbar para mantener la est�tica */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF6F0;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D4C3B3;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- HEADER / NAVEGACI�N -->
+    <header class="sticky top-0 z-50 bg-[#FAF6F0]/95 backdrop-blur-md border-b border-[#EADCC9] transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Logo e Identidad -->
+            <a href="#inicio" class="flex items-center space-x-3 group">
+                <div class="w-10 h-10 rounded-full bg-[#5C4033] flex items-center justify-center text-[#FAF6F0] font-serif text-lg font-bold transition-transform group-hover:rotate-12">
+                    ?
+                </div>
+                <div>
+                    <span class="text-2xl font-serif font-bold tracking-widest text-[#4A3B32]">OKINI</span>
+                    <span class="block text-[10px] uppercase tracking-widest text-[#8C7A6B]">Kyoto Coffee House</span>
+                </div>
+            </a>
+
+            <!-- Men� de Navegaci�n -->
+            <nav class="hidden md:flex space-x-8 text-sm font-medium text-[#5C4B40]">
+                <a href="#nosotros" class="hover:text-[#A67C52] transition-colors">Nuestra Historia</a>
+                <a href="#menu" class="hover:text-[#A67C52] transition-colors">El Men�</a>
+                <a href="#reservas" class="hover:text-[#A67C52] transition-colors">Reservas Especiales</a>
+                <a href="#tienda" class="hover:text-[#A67C52] transition-colors">Tienda Online</a>
+            </nav>
+
+            <!-- Acciones de Cabecera -->
+            <div class="flex items-center space-x-4">
+                <button onclick="toggleCart()" class="relative p-2 text-[#4A3B32] hover:text-[#A67C52] transition-colors focus:outline-none">
+                    <i data-lucide="shopping-bag" class="w-6 h-6"></i>
+                    <span id="cart-badge" class="absolute -top-1 -right-1 bg-[#A67C52] text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center hidden">0</span>
+                </button>
+                <a href="#reservas" class="hidden sm:inline-block bg-[#4A3B32] hover:bg-[#5C4B40] text-[#FAF6F0] px-5 py-2.5 rounded-lg text-xs font-semibold tracking-wider uppercase transition-colors">
+                    Reservar Mesa
+                </a>
+                <button class="md:hidden p-2 text-[#4A3B32]" onclick="toggleMobileMenu()">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Men� M�vil -->
+        <div id="mobile-menu" class="hidden md:hidden bg-[#FAF6F0] border-b border-[#EADCC9] px-4 pt-2 pb-4 space-y-2">
+            <a href="#nosotros" onclick="toggleMobileMenu()" class="block py-2 text-sm text-[#5C4B40] hover:text-[#A67C52]">Nuestra Historia</a>
+            <a href="#menu" onclick="toggleMobileMenu()" class="block py-2 text-sm text-[#5C4B40] hover:text-[#A67C52]">El Men�</a>
+            <a href="#reservas" onclick="toggleMobileMenu()" class="block py-2 text-sm text-[#5C4B40] hover:text-[#A67C52]">Reservas Especiales</a>
+            <a href="#tienda" onclick="toggleMobileMenu()" class="block py-2 text-sm text-[#5C4B40] hover:text-[#A67C52]">Tienda Online</a>
+            <a href="#reservas" onclick="toggleMobileMenu()" class="block text-center bg-[#4A3B32] text-[#FAF6F0] py-2 rounded-lg text-xs font-semibold tracking-wider uppercase">Reservar Mesa</a>
+        </div>
+    </header>
+
+    <!-- NOTIFICACIONES CUSTOMIZADAS (Para evitar alerts del navegador) -->
+    <div id="toast-container" class="fixed top-24 right-4 z-50 flex flex-col gap-2 max-w-sm w-full"></div>
+
+    <main class="flex-grow">
+        
+        <!-- HERO / BIENVENIDA -->
+        <section id="inicio" class="relative py-20 lg:py-32 overflow-hidden bg-[#F3EFE9] border-b border-[#EADCC9]">
+            <div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: radial-gradient(#4a3b32 2px, transparent 2px); background-size: 24px 24px;"></div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                        <span class="inline-block bg-[#EADCC9] text-[#5C4033] px-3 py-1 rounded-full text-xs font-semibold tracking-wider uppercase">Kioto en cada gota</span>
+                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-serif font-black tracking-tight text-[#33251E] leading-tight">
+                            Agradecimiento en forma de caf� de especialidad.
+                        </h1>
+                        <p class="text-lg text-[#6E5D51] max-w-2xl mx-auto lg:mx-0">
+                            Inspirados en la gratitud del dialecto de Kansai y la paciencia del m�tico m�todo <span class="font-semibold text-[#4A3B32]">Kyoto Drip</span>. Un santuario de calma donde servimos un m�ximo de 50 tazas exclusivas al d�a.
+                        </p>
+                        <div class="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 pt-4">
+                            <a href="#reservas" class="bg-[#4A3B32] hover:bg-[#5C4B40] text-[#FAF6F0] px-8 py-4 rounded-xl text-sm font-bold tracking-wider uppercase shadow-md transition-all">
+                                Reservar Preparaci�n
+                            </a>
+                            <a href="#menu" class="border border-[#4A3B32] text-[#4A3B32] hover:bg-[#4A3B32] hover:text-[#FAF6F0] px-8 py-4 rounded-xl text-sm font-bold tracking-wider uppercase transition-all">
+                                Ver Carta Completa
+                            </a>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-5 flex justify-center">
+                        <div class="relative w-72 h-96 sm:w-80 sm:h-[420px] rounded-t-full border-8 border-[#FAF6F0] shadow-2xl overflow-hidden bg-[#4A3B32]">
+                            <!-- SVG representativo de goteo Kyoto Drip -->
+                            <div class="absolute inset-0 flex flex-col items-center justify-center p-8 text-center text-[#FAF6F0]/90">
+                                <svg class="w-20 h-20 mb-6 text-[#D4C3B3] animate-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M12 2v20M8 5h8M9 9h6M10 13h4M12 17h.01"/>
+                                </svg>
+                                <span class="font-serif text-2xl mb-2 italic">Kyoto Drip</span>
+                                <span class="text-xs uppercase tracking-widest text-[#D4C3B3]">Gota a gota � 12 Horas</span>
+                                <div class="absolute bottom-6 text-[11px] text-[#FAF6F0]/60 italic font-light">
+                                    "La belleza de lo lento y lo deliberado"
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCI�N: NUESTRA HISTORIA -->
+        <section id="nosotros" class="py-20 bg-[#FAF6F0]">
+            <div class="max-w-4xl mx-auto px-4 text-center space-y-8">
+                <span class="text-[#A67C52] font-serif text-xl italic block">�Por qu� OKINI?</span>
+                <h2 class="text-3xl sm:text-4xl font-serif font-bold text-[#33251E]">El Arte de la Gratitud y el Kyoto Drip</h2>
+                <div class="h-1 w-20 bg-[#A67C52] mx-auto rounded"></div>
+                <div class="space-y-6 text-[#5C4B40] text-lg leading-relaxed text-left max-w-3xl mx-auto">
+                    <p>
+                        En la regi�n de **Kansai**, Jap�n�hogar de la milenaria ciudad de Kioto�la palabra **"Ookini"** (????) es una forma c�lida y tradicional de decir **"gracias"**. Es un vocablo que encierra respeto, comunidad y aprecio genuino por el momento compartido.
+                    </p>
+                    <p>
+                        Fue precisamente en Kioto donde se origin� el m�todo de extracci�n lenta en fr�o conocido como **Kyoto drip**. Este arte requiere que el agua helada caiga gota a gota sobre el caf� durante m�s de 12 horas, creando una bebida sumamente tersa, arom�tica y libre de amargores �speros.
+                    </p>
+                    <p>
+                        En **OKINI**, unimos ambos conceptos. Honramos la paciencia de las extracciones complejas y agradecemos tu visita limitando de forma consciente nuestra producci�n para asegurar la excelencia en cada taza.
+                    </p>
+                </div>
+                <!-- Reglas de negocio clave destacadas en banner sutil -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-8 max-w-3xl mx-auto">
+                    <div class="bg-[#F3EFE9] p-5 rounded-xl border border-[#EADCC9]">
+                        <h4 class="font-serif text-2xl font-bold text-[#4A3B32]">50</h4>
+                        <p class="text-xs uppercase tracking-wider text-[#8C7A6B] mt-1">Tazas Especiales al D�a</p>
+                    </div>
+                    <div class="bg-[#F3EFE9] p-5 rounded-xl border border-[#EADCC9]">
+                        <h4 class="font-serif text-2xl font-bold text-[#4A3B32]">2</h4>
+                        <p class="text-xs uppercase tracking-wider text-[#8C7A6B] mt-1">M�ximo por Persona</p>
+                    </div>
+                    <div class="bg-[#F3EFE9] p-5 rounded-xl border border-[#EADCC9]">
+                        <h4 class="font-serif text-2xl font-bold text-[#4A3B32]">8</h4>
+                        <p class="text-xs uppercase tracking-wider text-[#8C7A6B] mt-1">Cupos Cata Semanal</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCI�N: EL MEN� -->
+        <section id="menu" class="py-20 bg-[#F3EFE9] border-t border-b border-[#EADCC9]">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-3xl sm:text-4xl font-serif font-bold text-[#33251E]">Nuestra Carta</h2>
+                    <p class="text-sm text-[#8C7A6B] uppercase tracking-widest mt-2">Dos formas de experimentar OKINI</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                    <!-- M�todos Especiales (Requieren Reserva) -->
+                    <div class="lg:col-span-7 bg-[#FAF6F0] p-8 rounded-2xl shadow-sm border border-[#EADCC9] space-y-6">
+                        <div class="flex items-center justify-between border-b border-[#EADCC9] pb-4">
+                            <div>
+                                <h3 class="text-xl font-serif font-bold text-[#4A3B32]">1. Preparaciones Especiales</h3>
+                                <p class="text-xs text-[#A67C52] font-semibold uppercase tracking-wider mt-1">Requieren reserva anticipada</p>
+                            </div>
+                            <span class="bg-[#EADCC9] text-[#5C4033] text-xs font-semibold px-2.5 py-1 rounded">M�x. 50 tazas/d�a</span>
+                        </div>
+                        <p class="text-sm text-[#6E5D51] italic">M�todos de filtrado lento o complejo que exigen la m�xima atenci�n de nuestro barista. L�mite de 2 tazas por persona al d�a.</p>
+                        
+                        <div class="divide-y divide-[#F3EFE9]">
+                            <!-- Item 1 -->
+                            <div class="py-4 flex justify-between items-start">
+                                <div class="space-y-1 pr-4">
+                                    <h4 class="font-serif text-lg font-bold text-[#33251E] flex items-center">
+                                        V60
+                                    </h4>
+                                    <p class="text-xs text-[#8C7A6B]">Extracci�n de goteo c�nico. Resalta notas florales y acidez brillante.</p>
+                                </div>
+                                <span class="text-lg font-bold text-[#4A3B32]">$5.00</span>
+                            </div>
+                            <!-- Item 2 -->
+                            <div class="py-4 flex justify-between items-start">
+                                <div class="space-y-1 pr-4">
+                                    <h4 class="font-serif text-lg font-bold text-[#33251E] flex items-center">
+                                        Kyoto Drip
+                                    </h4>
+                                    <p class="text-xs text-[#8C7A6B]">Goteo lento en torre de cristal helada. Sabor redondo y licoroso.</p>
+                                </div>
+                                <span class="text-lg font-bold text-[#4A3B32]">$7.00</span>
+                            </div>
+                            <!-- Item 3 -->
+                            <div class="py-4 flex justify-between items-start">
+                                <div class="space-y-1 pr-4">
+                                    <h4 class="font-serif text-lg font-bold text-[#33251E] flex items-center">
+                                        Siphon (Sif�n Japon�s)
+                                    </h4>
+                                    <p class="text-xs text-[#8C7A6B]">Extracci�n al vac�o por vaporizaci�n. Cuerpo sedoso y retrogusto persistente.</p>
+                                </div>
+                                <span class="text-lg font-bold text-[#4A3B32]">$8.00</span>
+                            </div>
+                        </div>
+                        <div class="pt-4">
+                            <a href="#reservas" class="block text-center bg-[#A67C52] hover:bg-[#8F6841] text-white py-3 rounded-xl text-sm font-bold tracking-wider uppercase transition-all">
+                                Ir al Simulador de Reservas
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Prensa Francesa Walk-In -->
+                    <div class="lg:col-span-5 bg-[#4A3B32] text-[#FAF6F0] p-8 rounded-2xl shadow-xl flex flex-col justify-between border border-[#33251E]">
+                        <div class="space-y-6">
+                            <div class="flex items-center justify-between border-b border-[#FAF6F0]/20 pb-4">
+                                <div>
+                                    <h3 class="text-xl font-serif font-bold text-[#FAF6F0]">2. Prensa Francesa Walk-In</h3>
+                                    <p class="text-xs text-[#D4C3B3] uppercase tracking-wider mt-1">Sin reserva necesaria</p>
+                                </div>
+                                <span class="bg-[#FAF6F0]/10 text-[#FAF6F0] text-xs font-semibold px-2.5 py-1 rounded">Ilimitado</span>
+                            </div>
+                            
+                            <p class="text-sm text-[#D4C3B3] leading-relaxed">
+                                Disponible durante todo el horario de atenci�n (8:00 AM - 8:00 PM). Una opci�n cl�sica, con cuerpo denso y aceites naturales preservados, perfecta para quienes deciden visitarnos espont�neamente.
+                            </p>
+
+                            <div class="bg-[#FAF6F0]/5 p-6 rounded-xl border border-[#FAF6F0]/10 flex justify-between items-center">
+                                <div>
+                                    <span class="block text-xs uppercase tracking-widest text-[#D4C3B3]">Precio por taza</span>
+                                    <span class="text-2xl font-serif font-bold">$3.00</span>
+                                </div>
+                                <span class="text-xs text-[#D4C3B3] italic text-right">Disponible hasta<br>el cierre</span>
+                            </div>
+                        </div>
+
+                        <div class="pt-8 border-t border-[#FAF6F0]/10 mt-8 text-center text-xs text-[#D4C3B3] italic">
+                            Ven directamente a barra y disfruta de nuestra Prensa Francesa con el grano del mes.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCI�N: SISTEMA DE RESERVAS INTERACTIVO -->
+        <section id="reservas" class="py-20 bg-[#FAF6F0]">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-3xl sm:text-4xl font-serif font-bold text-[#33251E]">Simulador de Reservas en Tiempo Real</h2>
+                    <p class="text-sm text-[#8C7A6B] uppercase tracking-widest mt-2">Ponemos a prueba la l�gica de negocio de OKINI</p>
+                </div>
+
+                <!-- Paneles de disponibilidad en vivo -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                    <!-- Panel Caf� Especialidad -->
+                    <div class="bg-[#FAF6F0] border-2 border-[#EADCC9] p-6 rounded-2xl relative overflow-hidden shadow-sm">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-serif text-lg font-bold text-[#4A3B32]">Disponibilidad Diaria de Tazas Especiales</h3>
+                            <span class="text-xs bg-[#4A3B32] text-white px-2 py-0.5 rounded">L�mite: 50/d�a</span>
+                        </div>
+                        <div class="relative pt-1">
+                            <div class="flex mb-2 items-center justify-between">
+                                <div>
+                                    <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-[#4A3B32] bg-[#EADCC9]">
+                                        Tazas Disponibles
+                                    </span>
+                                </div>
+                                <div class="text-right">
+                                    <span id="tazas-disponibles" class="text-sm font-bold text-[#4A3B32]">50 / 50</span>
+                                </div>
+                            </div>
+                            <div class="overflow-hidden h-3 mb-4 text-xs flex rounded bg-[#EADCC9]">
+                                <div id="tazas-progreso" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-[#4A3B32] w-full transition-all duration-500"></div>
+                            </div>
+                        </div>
+                        <p class="text-xs text-[#8C7A6B] italic">Las preparaciones especiales (V60, Kyoto Drip y Siphon) se restan de esta cuota global diaria.</p>
+                    </div>
+
+                    <!-- Panel Cata Semanal -->
+                    <div class="bg-[#FAF6F0] border-2 border-[#EADCC9] p-6 rounded-2xl relative overflow-hidden shadow-sm">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-serif text-lg font-bold text-[#4A3B32]">Cupos de Cata Semanal</h3>
+                            <span class="text-xs bg-[#A67C52] text-white px-2 py-0.5 rounded">L�mite: 8/sesi�n</span>
+                        </div>
+                        <div class="relative pt-1">
+                            <div class="flex mb-2 items-center justify-between">
+                                <div>
+                                    <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-[#A67C52] bg-[#FAF6F0] border border-[#EADCC9]">
+                                        Cupos Disponibles
+                                    </span>
+                                </div>
+                                <div class="text-right">
+                                    <span id="cata-disponibles" class="text-sm font-bold text-[#A67C52]">8 / 8</span>
+                                </div>
+                            </div>
+                            <div class="overflow-hidden h-3 mb-4 text-xs flex rounded bg-[#EADCC9]">
+                                <div id="cata-progreso" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-[#A67C52] w-full transition-all duration-500"></div>
+                            </div>
+                        </div>
+                        <p class="text-xs text-[#8C7A6B] italic">Costo de $25 por persona, incluye degustaci�n guiada por nuestro barista de especialidad.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <!-- Formulario de simulaci�n -->
+                    <div class="lg:col-span-7 bg-[#F3EFE9] p-8 rounded-2xl border border-[#EADCC9]">
+                        <h3 class="text-xl font-serif font-bold text-[#33251E] mb-6">Generar Reserva</h3>
+                        
+                        <form id="reserva-form" onsubmit="procesarReserva(event)" class="space-y-6">
+                            <!-- Datos del Cliente -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-semibold uppercase tracking-wider text-[#6E5D51] mb-2">Nombre Completo</label>
+                                    <input type="text" id="reserva-nombre" required class="w-full bg-white border border-[#EADCC9] rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#4A3B32] transition-all">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold uppercase tracking-wider text-[#6E5D51] mb-2">Correo Electr�nico</label>
+                                    <input type="email" id="reserva-email" required class="w-full bg-white border border-[#EADCC9] rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#4A3B32] transition-all">
+                                </div>
+                            </div>
+
+                            <!-- Selector de tipo de reserva -->
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-[#6E5D51] mb-2">Tipo de Experiencia</label>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <label class="flex items-center justify-between p-4 bg-white border border-[#EADCC9] rounded-xl cursor-pointer hover:border-[#4A3B32] transition-all">
+                                        <div class="flex items-center">
+                                            <input type="radio" name="tipo_reserva" value="especial" checked onchange="toggleFormulariosReserva()" class="text-[#4A3B32] focus:ring-[#4A3B32]">
+                                            <span class="ml-2 text-sm font-medium text-[#4A3B32]">M�todo Especial</span>
+                                        </div>
+                                        <i data-lucide="coffee" class="w-4 h-4 text-[#8C7A6B]"></i>
+                                    </label>
+                                    <label class="flex items-center justify-between p-4 bg-white border border-[#EADCC9] rounded-xl cursor-pointer hover:border-[#4A3B32] transition-all">
+                                        <div class="flex items-center">
+                                            <input type="radio" name="tipo_reserva" value="cata" onchange="toggleFormulariosReserva()" class="text-[#4A3B32] focus:ring-[#4A3B32]">
+                                            <span class="ml-2 text-sm font-medium text-[#4A3B32]">Cata Semanal</span>
+                                        </div>
+                                        <i data-lucide="award" class="w-4 h-4 text-[#8C7A6B]"></i>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Formulario Din�mico: M�todo Especial -->
+                            <div id="seccion-metodo-especial" class="space-y-4">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-semibold uppercase tracking-wider text-[#6E5D51] mb-2">M�todo de Filtrado</label>
+                                        <select id="reserva-metodo" class="w-full bg-white border border-[#EADCC9] rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#4A3B32]">
+                                            <option value="V60" data-precio="5">V60 - $5.00</option>
+                                            <option value="Kyoto Drip" data-precio="7">Kyoto Drip - $7.00</option>
+                                            <option value="Siphon" data-precio="8">Siphon - $8.00</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold uppercase tracking-wider text-[#6E5D51] mb-2">Tazas (M�ximo 2 por persona)</label>
+                                        <input type="number" id="reserva-tazas" min="1" max="2" value="1" class="w-full bg-white border border-[#EADCC9] rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#4A3B32]">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Formulario Din�mico: Cata Semanal -->
+                            <div id="seccion-cata" class="space-y-4 hidden">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-semibold uppercase tracking-wider text-[#6E5D51] mb-2">Cupos a Reservar</label>
+                                        <input type="number" id="reserva-cupos" min="1" max="8" value="1" class="w-full bg-white border border-[#EADCC9] rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#4A3B32]">
+                                    </div>
+                                    <div class="flex items-end pb-3">
+                                        <span class="text-xs text-[#8C7A6B] italic">La cata incluye varias degustaciones de caf� de especialidad.</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Bot�n de Env�o -->
+                            <button type="submit" class="w-full bg-[#4A3B32] hover:bg-[#5C4B40] text-[#FAF6F0] py-4 rounded-xl text-sm font-bold tracking-wider uppercase transition-all shadow-md">
+                                Confirmar y Simular Reserva
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Panel de Reservas Confirmadas / Historial -->
+                    <div class="lg:col-span-5 bg-white p-6 rounded-2xl border border-[#EADCC9] flex flex-col h-[520px]">
+                        <div class="flex justify-between items-center border-b border-[#F3EFE9] pb-4 mb-4">
+                            <h3 class="font-serif text-lg font-bold text-[#4A3B32]">Bit�cora de Reservas</h3>
+                            <button onclick="reiniciarSimulacion()" class="text-xs text-[#A67C52] hover:underline flex items-center gap-1">
+                                <i data-lucide="refresh-cw" class="w-3 h-3"></i> Reiniciar
+                            </button>
+                        </div>
+                        
+                        <div id="lista-reservas" class="flex-grow overflow-y-auto space-y-3 pr-2 text-center flex flex-col justify-center text-gray-400">
+                            <!-- Estado Vac�o por defecto -->
+                            <div class="py-12">
+                                <i data-lucide="calendar" class="w-12 h-12 mx-auto text-[#D4C3B3] mb-3"></i>
+                                <p class="text-sm font-medium text-[#8C7A6B]">No hay reservas para hoy.</p>
+                                <p class="text-xs text-[#8C7A6B]/70 mt-1">Simula tu primera reserva en el panel izquierdo.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Mini resumen de ventas de la barra -->
+                        <div class="border-t border-[#F3EFE9] pt-4 mt-4 grid grid-cols-2 gap-4 text-center">
+                            <div>
+                                <span class="block text-[10px] uppercase tracking-widest text-[#8C7A6B]">Tazas Reservadas</span>
+                                <span id="resumen-tazas" class="text-lg font-serif font-bold text-[#4A3B32]">0</span>
+                            </div>
+                            <div>
+                                <span class="block text-[10px] uppercase tracking-widest text-[#8C7A6B]">Total Recaudado</span>
+                                <span id="resumen-ventas" class="text-lg font-serif font-bold text-[#A67C52]">$0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCI�N: TIENDA ONLINE -->
+        <section id="tienda" class="py-20 bg-[#F3EFE9] border-t border-[#EADCC9]">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-3xl sm:text-4xl font-serif font-bold text-[#33251E]">Tienda de Especialidad OKINI</h2>
+                    <p class="text-sm text-[#8C7A6B] uppercase tracking-widest mt-2">Lleva la experiencia tradicional a tu hogar</p>
+                </div>
+
+                <!-- Creador de Mezcla Personalizada de Caf� -->
+                <div class="bg-white p-8 rounded-2xl border border-[#EADCC9] mb-12 shadow-sm">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div class="lg:col-span-5 space-y-4">
+                            <span class="inline-block bg-[#EADCC9] text-[#5C4033] px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase">Exclusivo de OKINI</span>
+                            <h3 class="text-2xl font-serif font-bold text-[#33251E]">Crea tu Mezcla de Granos Personalizada</h3>
+                            <p class="text-sm text-[#6E5D51] leading-relaxed">
+                                Selecciona la combinaci�n ideal para tu paladar. Ofrecemos tres de nuestros mejores or�genes de especialidad para que encuentres tu equilibrio perfecto de acidez, cuerpo y notas dulces.
+                            </p>
+                            <div class="p-4 bg-[#FAF6F0] rounded-xl border border-[#EADCC9] flex justify-between items-center">
+                                <div>
+                                    <span class="block text-xs uppercase tracking-widest text-[#8C7A6B]">Bolsa de 340g</span>
+                                    <span class="text-xl font-bold text-[#4A3B32]">$18.00</span>
+                                </div>
+                                <span class="text-xs text-[#A67C52] font-semibold">Tostado Semanal</span>
+                            </div>
+                        </div>
+
+                        <!-- Panel de Personalizaci�n Interactivo -->
+                        <div class="lg:col-span-7 bg-[#FAF6F0] p-6 rounded-xl border border-[#EADCC9] space-y-6">
+                            <h4 class="font-serif text-md font-bold text-[#4A3B32]">Proporciones de la Mezcla</h4>
+                            
+                            <div class="space-y-4">
+                                <!-- Origen 1: Etiop�a -->
+                                <div>
+                                    <div class="flex justify-between text-xs mb-1">
+                                        <span class="font-semibold text-[#5C4B40]">Etiop�a Yirgacheffe (Notas florales y c�tricas)</span>
+                                        <span id="pct-etiopia" class="font-bold">40%</span>
+                                    </div>
+                                    <input type="range" id="slider-etiopia" min="0" max="100" value="40" oninput="actualizarMezcla()" class="w-full h-1 bg-[#EADCC9] rounded-lg appearance-none cursor-pointer accent-[#4A3B32]">
+                                </div>
+
+                                <!-- Origen 2: Colombia -->
+                                <div>
+                                    <div class="flex justify-between text-xs mb-1">
+                                        <span class="font-semibold text-[#5C4B40]">Colombia Huila (Notas de chocolate y caramelo)</span>
+                                        <span id="pct-colombia" class="font-bold">30%</span>
+                                    </div>
+                                    <input type="range" id="slider-colombia" min="0" max="100" value="30" oninput="actualizarMezcla()" class="w-full h-1 bg-[#EADCC9] rounded-lg appearance-none cursor-pointer accent-[#4A3B32]">
+                                </div>
+
+                                <!-- Origen 3: Sumatra -->
+                                <div>
+                                    <div class="flex justify-between text-xs mb-1">
+                                        <span class="font-semibold text-[#5C4B40]">Sumatra Mandheling (Cuerpo robusto, notas terrosas)</span>
+                                        <span id="pct-sumatra" class="font-bold">30%</span>
+                                    </div>
+                                    <input type="range" id="slider-sumatra" min="0" max="100" value="30" oninput="actualizarMezcla()" class="w-full h-1 bg-[#EADCC9] rounded-lg appearance-none cursor-pointer accent-[#4A3B32]">
+                                </div>
+                            </div>
+
+                            <!-- Alerta de equilibrio de porcentaje -->
+                            <div id="alerta-porcentaje" class="text-xs text-center font-medium py-2 rounded"></div>
+
+                            <div class="flex flex-col sm:flex-row gap-4 items-center justify-between pt-4 border-t border-[#EADCC9]">
+                                <div>
+                                    <label class="block text-xs font-semibold uppercase tracking-wider text-[#8C7A6B] mb-1">Tipo de Molienda</label>
+                                    <select id="molienda-personalizada" class="bg-white border border-[#EADCC9] rounded-lg px-3 py-1.5 text-xs text-[#4A3B32] focus:outline-none">
+                                        <option value="En Grano">En Grano</option>
+                                        <option value="Molido Fino (Espresso)">Molido Fino (Espresso)</option>
+                                        <option value="Molido Medio (Filtro)">Molido Medio (Filtro)</option>
+                                        <option value="Molido Grueso (Prensa)">Molido Grueso (Prensa)</option>
+                                    </select>
+                                </div>
+                                <button id="btn-agregar-personalizado" onclick="agregarMezclaAlCarrito()" class="w-full sm:w-auto bg-[#4A3B32] hover:bg-[#5C4B40] text-white px-6 py-3 rounded-lg text-xs font-bold uppercase tracking-wider transition-colors">
+                                    Agregar al Carrito
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grilla de Productos Fijos -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Producto 1: Caf� Granos Predeterminados -->
+                    <div class="bg-white rounded-2xl border border-[#EADCC9] overflow-hidden flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow">
+                        <div class="p-6">
+                            <span class="text-[10px] uppercase tracking-widest text-[#A67C52] font-semibold">Caf� en Bolsa</span>
+                            <h4 class="font-serif text-lg font-bold text-[#33251E] mt-1">Okini House Blend</h4>
+                            <p class="text-xs text-[#8C7A6B] mt-2">Mezcla insignia de la casa balanceada para goteo. Bolsa de 340g.</p>
+                            <div class="mt-4">
+                                <label class="block text-[10px] text-[#8C7A6B] uppercase font-semibold mb-1">Molienda</label>
+                                <select id="molienda-prod-1" class="w-full bg-[#FAF6F0] border border-[#EADCC9] rounded p-1 text-xs">
+                                    <option value="En grano">En Grano</option>
+                                    <option value="Fino (Espresso)">Fino (Espresso)</option>
+                                    <option value="Medio (Filtro)">Medio (Filtro)</option>
+                                    <option value="Grueso (Prensa)">Grueso (Prensa)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="p-6 bg-[#FAF6F0] border-t border-[#EADCC9] flex justify-between items-center">
+                            <span class="text-md font-bold text-[#4A3B32]">$15.00</span>
+                            <button onclick="agregarAlCarrito(1, 'Okini House Blend', 15.00, 'molienda-prod-1')" class="bg-[#4A3B32] hover:bg-[#5C4B40] text-white px-3 py-2 rounded-lg text-xs uppercase font-bold tracking-wider transition-colors">
+                                A�adir
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Producto 2: Caf�s de Origen �nico -->
+                    <div class="bg-white rounded-2xl border border-[#EADCC9] overflow-hidden flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow">
+                        <div class="p-6">
+                            <span class="text-[10px] uppercase tracking-widest text-[#A67C52] font-semibold">Caf� en Bolsa</span>
+                            <h4 class="font-serif text-lg font-bold text-[#33251E] mt-1">Etiop�a de Especialidad</h4>
+                            <p class="text-xs text-[#8C7A6B] mt-2">Origen �nico con notas florales y de durazno dulce. Bolsa de 340g.</p>
+                            <div class="mt-4">
+                                <label class="block text-[10px] text-[#8C7A6B] uppercase font-semibold mb-1">Molienda</label>
+                                <select id="molienda-prod-2" class="w-full bg-[#FAF6F0] border border-[#EADCC9] rounded p-1 text-xs">
+                                    <option value="En grano">En Grano</option>
+                                    <option value="Fino (Espresso)">Fino (Espresso)</option>
+                                    <option value="Medio (Filtro)">Medio (Filtro)</option>
+                                    <option value="Grueso (Prensa)">Grueso (Prensa)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="p-6 bg-[#FAF6F0] border-t border-[#EADCC9] flex justify-between items-center">
+                            <span class="text-md font-bold text-[#4A3B32]">$17.00</span>
+                            <button onclick="agregarAlCarrito(2, 'Etiop�a de Especialidad', 17.00, 'molienda-prod-2')" class="bg-[#4A3B32] hover:bg-[#5C4B40] text-white px-3 py-2 rounded-lg text-xs uppercase font-bold tracking-wider transition-colors">
+                                A�adir
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Producto 3: Tazas de Cer�mica -->
+                    <div class="bg-white rounded-2xl border border-[#EADCC9] overflow-hidden flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow">
+                        <div class="p-6">
+                            <span class="text-[10px] uppercase tracking-widest text-[#A67C52] font-semibold">Accesorios</span>
+                            <h4 class="font-serif text-lg font-bold text-[#33251E] mt-1">Taza de Cer�mica Wabi-Sabi</h4>
+                            <p class="text-xs text-[#8C7A6B] mt-2">Moldeada a mano por artesanos locales en Kioto. Cada pieza es �nica.</p>
+                        </div>
+                        <div class="p-6 bg-[#FAF6F0] border-t border-[#EADCC9] flex justify-between items-center">
+                            <span class="text-md font-bold text-[#4A3B32]">$24.00</span>
+                            <button onclick="agregarAlCarrito(3, 'Taza Cer�mica Wabi-Sabi', 24.00)" class="bg-[#4A3B32] hover:bg-[#5C4B40] text-white px-3 py-2 rounded-lg text-xs uppercase font-bold tracking-wider transition-colors">
+                                A�adir
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Producto 4: Filtros de Papel -->
+                    <div class="bg-white rounded-2xl border border-[#EADCC9] overflow-hidden flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow">
+                        <div class="p-6">
+                            <span class="text-[10px] uppercase tracking-widest text-[#A67C52] font-semibold">Consumibles</span>
+                            <h4 class="font-serif text-lg font-bold text-[#33251E] mt-1">Filtros de Papel V60 (100u)</h4>
+                            <p class="text-xs text-[#8C7A6B] mt-2">Papel sin blanquear que garantiza una extracci�n limpia y sin sabores externos.</p>
+                        </div>
+                        <div class="p-6 bg-[#FAF6F0] border-t border-[#EADCC9] flex justify-between items-center">
+                            <span class="text-md font-bold text-[#4A3B32]">$8.00</span>
+                            <button onclick="agregarAlCarrito(4, 'Filtros Papel V60', 8.00)" class="bg-[#4A3B32] hover:bg-[#5C4B40] text-white px-3 py-2 rounded-lg text-xs uppercase font-bold tracking-wider transition-colors">
+                                A�adir
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER / PIE DE P�GINA -->
+    <footer class="bg-[#33251E] text-[#D4C3B3] py-12 border-t border-[#4A3B32]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div class="space-y-4">
+                <span class="text-2xl font-serif font-bold tracking-widest text-[#FAF6F0]">OKINI</span>
+                <p class="text-xs text-[#A69383] leading-relaxed">
+                    Un espacio tradicional dedicado a la excelencia, la gratitud y la extracci�n lenta de caf� de especialidad. Inspirado en Kansai, tra�do al mundo entero.
+                </p>
+            </div>
+            <div>
+                <h4 class="font-serif text-sm font-semibold text-[#FAF6F0] uppercase tracking-wider mb-4">Ubicaci�n & Contacto</h4>
+                <ul class="space-y-2 text-xs text-[#A69383]">
+                    <li>Calle Armon�a de Kioto, No. 108</li>
+                    <li>Santuario de Caf�, Distrito de Kansai</li>
+                    <li>Email: hola@okini-coffee.com</li>
+                    <li>Tel: +1 (555) 489-1229</li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-serif text-sm font-semibold text-[#FAF6F0] uppercase tracking-wider mb-4">Horarios</h4>
+                <p class="text-xs text-[#A69383]">Todos los d�as de la semana</p>
+                <p class="text-sm font-bold text-[#FAF6F0] mt-1">8:00 AM - 8:00 PM</p>
+                <p class="text-[10px] text-[#A69383]/80 italic mt-2">La Prensa Francesa est� disponible de forma continua sin reserva.</p>
+            </div>
+            <div>
+                <h4 class="font-serif text-sm font-semibold text-[#FAF6F0] uppercase tracking-wider mb-4">Reglas de Negocio</h4>
+                <ul class="space-y-1 text-[11px] text-[#A69383]">
+                    <li>� M�ximo 50 tazas especiales/d�a</li>
+                    <li>� M�ximo 2 tazas especiales por persona</li>
+                    <li>� M�todos especiales requieren reserva</li>
+                    <li>� Cata semanal limitada a 8 personas</li>
+                </ul>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 mt-8 border-t border-[#4A3B32] text-center text-xs text-[#A69383]">
+            <p>� 2026 OKINI Coffee House. Todos los derechos reservados. Desarrollado con esmero y gratitud (Ookini!).</p>
+        </div>
+    </footer>
+
+    <!-- INTERFAZ DESLIZANTE DEL CARRITO DE COMPRAS (SIDEBAR) -->
+    <div id="cart-sidebar" class="fixed inset-y-0 right-0 z-50 w-full sm:w-96 bg-[#FAF6F0] shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out border-l border-[#EADCC9] flex flex-col justify-between">
+        <!-- Cabecera Carrito -->
+        <div class="p-6 border-b border-[#EADCC9] flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i data-lucide="shopping-bag" class="w-5 h-5 text-[#4A3B32]"></i>
+                <h3 class="font-serif text-lg font-bold text-[#4A3B32]">Tu Bolsa de Compra</h3>
+            </div>
+            <button onclick="toggleCart()" class="p-1 hover:bg-[#EADCC9] rounded-lg transition-colors">
+                <i data-lucide="x" class="w-6 h-6 text-[#4A3B32]"></i>
+            </button>
+        </div>
+
+        <!-- Contenido de Items -->
+        <div id="cart-items" class="flex-grow overflow-y-auto p-6 space-y-4">
+            <!-- Estado Vac�o -->
+            <div class="flex flex-col items-center justify-center h-full text-center text-[#8C7A6B]/80">
+                <i data-lucide="shopping-cart" class="w-12 h-12 mb-3 text-[#D4C3B3]"></i>
+                <p class="text-sm font-medium">�A�n no te has decidido?</p>
+                <p class="text-xs mt-1">Nuestros caf�s tostados artesanalmente te esperan.</p>
+            </div>
+        </div>
+
+        <!-- Footer del Carrito -->
+        <div class="p-6 border-t border-[#EADCC9] bg-[#F3EFE9] space-y-4">
+            <div class="flex justify-between items-center text-sm font-bold text-[#4A3B32]">
+                <span>Total Estimado:</span>
+                <span id="cart-total" class="text-lg font-serif">$0.00</span>
+            </div>
+            <button onclick="finalizarCompra()" class="w-full bg-[#4A3B32] hover:bg-[#5C4B40] text-white py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-colors shadow-sm">
+                Procesar Pedido
+            </button>
+            <p class="text-[10px] text-[#8C7A6B] text-center italic">
+                * Precios listados en d�lares para nuestra comunidad internacional.
+            </p>
+        </div>
+    </div>
+
+    <!-- Fondo Oscuro para cuando el Carrito est� Abierto -->
+    <div id="cart-overlay" onclick="toggleCart()" class="fixed inset-0 bg-black/40 z-40 hidden transition-opacity"></div>
+
+    <!-- SCRIPT DE COMPORTAMIENTO & SIMULACIONES -->
+    <script>
+        // Inicializar iconos de Lucide
+        lucide.createIcons();
+
+        // variables de estado de la simulaci�n de Reservas (REGLAS DE NEGOCIO)
+        let tazasDisponibles = 50;
+        let cataDisponibles = 8;
+        let historialReservas = [];
+        let totalVentasReservas = 0;
+
+        // Estructura del Carrito de Compras
+        let carrito = [];
+
+        // Inicializar Interfaz del Simulador
+        actualizarSimuladorUI();
+
+        // -------------------------
+        // NOTIFICACIONES TOAST PERSONALIZADAS
+        // -------------------------
+        function showToast(mensaje, tipo = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `p-4 rounded-xl shadow-lg border text-xs font-medium flex items-center justify-between transform translate-y-2 opacity-0 transition-all duration-300 ${
+                tipo === 'success' ? 'bg-[#FAF6F0] border-emerald-500 text-emerald-800' : 'bg-[#FAF6F0] border-rose-500 text-rose-800'
+            }`;
+            
+            const icon = tipo === 'success' ? 'check-circle' : 'alert-circle';
+            toast.innerHTML = `
+                <div class="flex items-center gap-2">
+                    <i data-lucide="${icon}" class="w-4 h-4"></i>
+                    <span>${mensaje}</span>
+                </div>
+                <button onclick="this.parentElement.remove()" class="text-gray-400 hover:text-gray-600 ml-2">?</button>
+            `;
+            
+            container.appendChild(toast);
+            lucide.createIcons();
+
+            // Animaci�n Entrada
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 50);
+
+            // Auto-eliminaci�n tras 5 segundos
+            setTimeout(() => {
+                toast.classList.add('opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 5000);
+        }
+
+        // -------------------------
+        // L�GICA DE SIMULADOR DE RESERVAS (REGLAS DE NEGOCIO)
+        // -------------------------
+        function toggleFormulariosReserva() {
+            const tipo = document.querySelector('input[name="tipo_reserva"]:checked').value;
+            const seccionEspecial = document.getElementById('seccion-metodo-especial');
+            const seccionCata = document.getElementById('seccion-cata');
+
+            if (tipo === 'especial') {
+                seccionEspecial.classList.remove('hidden');
+                seccionCata.classList.add('hidden');
+            } else {
+                seccionEspecial.classList.add('hidden');
+                seccionCata.classList.remove('hidden');
+            }
+        }
+
+        function procesarReserva(e) {
+            e.preventDefault();
+            const nombre = document.getElementById('reserva-nombre').value;
+            const email = document.getElementById('reserva-email').value;
+            const tipo = document.querySelector('input[name="tipo_reserva"]:checked').value;
+
+            if (tipo === 'especial') {
+                const metodo = document.getElementById('reserva-metodo').value;
+                const selectElement = document.getElementById('reserva-metodo');
+                const precioUnidad = parseFloat(selectElement.options[selectElement.selectedIndex].getAttribute('data-precio'));
+                const tazas = parseInt(document.getElementById('reserva-tazas').value);
+
+                // Regla de Negocio 1: M�ximo 2 tazas por persona
+                if (tazas > 2) {
+                    showToast('Regla de Negocio: M�ximo 2 tazas de preparaci�n especial por persona al d�a.', 'error');
+                    return;
+                }
+
+                // Regla de Negocio 2: Cupo m�ximo global de 50 tazas
+                if (tazasDisponibles < tazas) {
+                    showToast(`Lo sentimos. Solo quedan ${tazasDisponibles} tazas disponibles de preparaci�n especial hoy.`, 'error');
+                    return;
+                }
+
+                // Descontar y registrar
+                tazasDisponibles -= tazas;
+                const totalCosto = precioUnidad * tazas;
+                totalVentasReservas += totalCosto;
+
+                historialReservas.push({
+                    id: Math.floor(1000 + Math.random() * 9000),
+                    nombre: nombre,
+                    tipo: `M. Especial (${metodo})`,
+                    cantidad: `${tazas} taza(s)`,
+                    costo: totalCosto
+                });
+
+                showToast(`�Reserva Exitosa! Se han reservado ${tazas} taza(s) de ${metodo} para ${nombre}.`, 'success');
+
+            } else if (tipo === 'cata') {
+                const cupos = parseInt(document.getElementById('reserva-cupos').value);
+
+                // Regla de Negocio 3: M�ximo 8 personas por cata semanal
+                if (cataDisponibles < cupos) {
+                    showToast(`No hay suficientes cupos. Solo quedan ${cataDisponibles} vacantes para la Cata Semanal.`, 'error');
+                    return;
+                }
+
+                // Descontar y registrar
+                cataDisponibles -= cupos;
+                const totalCosto = 25 * cupos;
+                totalVentasReservas += totalCosto;
+
+                historialReservas.push({
+                    id: Math.floor(1000 + Math.random() * 9000),
+                    nombre: nombre,
+                    tipo: 'Cata Semanal',
+                    cantidad: `${cupos} cupo(s)`,
+                    costo: totalCosto
+                });
+
+                showToast(`�Reserva de Cata Confirmada! ${cupos} lugar(es) reservados para ${nombre}.`, 'success');
+            }
+
+            // Resetear inputs del formulario conservando los datos b�sicos del cliente
+            document.getElementById('reserva-tazas').value = "1";
+            document.getElementById('reserva-cupos').value = "1";
+
+            actualizarSimuladorUI();
+        }
+
+        function actualizarSimuladorUI() {
+            // Actualizar textos e indicadores de barra de tazas especiales
+            document.getElementById('tazas-disponibles').innerText = `${tazasDisponibles} / 50`;
+            const pctTazas = (tazasDisponibles / 50) * 100;
+            document.getElementById('tazas-progreso').style.width = `${pctTazas}%`;
+
+            // Actualizar textos e indicadores de barra de cata
+            document.getElementById('cata-disponibles').innerText = `${cataDisponibles} / 8`;
+            const pctCata = (cataDisponibles / 8) * 100;
+            document.getElementById('cata-progreso').style.width = `${pctCata}%`;
+
+            // Actualizar sumario financiero
+            const tazasReservadas = 50 - tazasDisponibles;
+            document.getElementById('resumen-tazas').innerText = tazasReservadas;
+            document.getElementById('resumen-ventas').innerText = `$${totalVentasReservas.toFixed(2)}`;
+
+            // Renderizar Historial
+            const lista = document.getElementById('lista-reservas');
+            if (historialReservas.length === 0) {
+                lista.className = "flex-grow overflow-y-auto space-y-3 pr-2 text-center flex flex-col justify-center text-[#8C7A6B]/70";
+                lista.innerHTML = `
+                    <div class="py-12">
+                        <i data-lucide="calendar" class="w-12 h-12 mx-auto text-[#D4C3B3] mb-3"></i>
+                        <p class="text-sm font-medium">No hay reservas para hoy.</p>
+                        <p class="text-xs mt-1">Simula tu primera reserva en el formulario.</p>
+                    </div>
+                `;
+            } else {
+                lista.className = "flex-grow overflow-y-auto space-y-3 pr-2 text-left";
+                lista.innerHTML = historialReservas.map(res => `
+                    <div class="p-3 bg-[#FAF6F0] border border-[#EADCC9] rounded-xl text-xs flex justify-between items-center transition-all hover:border-[#4A3B32]">
+                        <div>
+                            <div class="font-bold text-[#4A3B32]">${res.nombre}</div>
+                            <div class="text-[10px] text-[#8C7A6B] mt-0.5">${res.tipo} � ${res.cantidad}</div>
+                        </div>
+                        <div class="text-right">
+                            <span class="font-mono font-bold text-[#A67C52]">$${res.costo.toFixed(2)}</span>
+                            <span class="block text-[8px] text-gray-400">ID: #${res.id}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            lucide.createIcons();
+        }
+
+        function reiniciarSimulacion() {
+            tazasDisponibles = 50;
+            cataDisponibles = 8;
+            historialReservas = [];
+            totalVentasReservas = 0;
+            actualizarSimuladorUI();
+            showToast('El simulador se ha reiniciado a su estado inicial de tazas y cupos.', 'success');
+        }
+
+        // -------------------------
+        // L�GICA DE TIENDA & CARRITO DE COMPRAS
+        // -------------------------
+        function toggleCart() {
+            const sidebar = document.getElementById('cart-sidebar');
+            const overlay = document.getElementById('cart-overlay');
+            sidebar.classList.toggle('translate-x-full');
+            overlay.classList.toggle('hidden');
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Actualizar el control deslizante de mezcla personalizada para que sume 100%
+        function actualizarMezcla() {
+            let etiopia = parseInt(document.getElementById('slider-etiopia').value);
+            let colombia = parseInt(document.getElementById('slider-colombia').value);
+            let sumatra = parseInt(document.getElementById('slider-sumatra').value);
+
+            let total = etiopia + colombia + sumatra;
+
+            // Si se pasa de 100%, corregir proporcionalmente o alertar
+            document.getElementById('pct-etiopia').innerText = `${etiopia}%`;
+            document.getElementById('pct-colombia').innerText = `${colombia}%`;
+            document.getElementById('pct-sumatra').innerText = `${sumatra}%`;
+
+            const alerta = document.getElementById('alerta-porcentaje');
+            const btn = document.getElementById('btn-agregar-personalizado');
+
+            if (total === 100) {
+                alerta.innerText = "�Mezcla equilibrada al 100%! Lista para empaque.";
+                alerta.className = "text-xs text-center font-medium py-2 rounded bg-emerald-50 text-emerald-800 border border-emerald-200";
+                btn.disabled = false;
+                btn.className = "w-full sm:w-auto bg-[#4A3B32] hover:bg-[#5C4B40] text-white px-6 py-3 rounded-lg text-xs font-bold uppercase tracking-wider transition-colors";
+            } else {
+                alerta.innerText = `La mezcla actual suma ${total}%. Debe sumar exactamente 100% para poder empacarla.`;
+                alerta.className = "text-xs text-center font-medium py-2 rounded bg-amber-50 text-amber-800 border border-amber-200";
+                btn.disabled = true;
+                btn.className = "w-full sm:w-auto bg-gray-300 text-gray-500 px-6 py-3 rounded-lg text-xs font-bold uppercase tracking-wider cursor-not-allowed";
+            }
+        }
+
+        // Inicializar la alerta del mezclador
+        actualizarMezcla();
+
+        function agregarMezclaAlCarrito() {
+            const etiopia = document.getElementById('slider-etiopia').value;
+            const colombia = document.getElementById('slider-colombia').value;
+            const sumatra = document.getElementById('slider-sumatra').value;
+            const molienda = document.getElementById('molienda-personalizada').value;
+
+            const detalleMezcla = `Mezcla Personalizada (Etiop�a ${etiopia}%, Colombia ${colombia}%, Sumatra ${sumatra}%) - Molienda: ${molienda}`;
+            
+            // A�adir al carrito
+            carrito.push({
+                id: 'custom-' + Date.now(),
+                nombre: 'Bolsa Personalizada OKINI',
+                detalle: detalleMezcla,
+                precio: 18.00,
+                cantidad: 1
+            });
+
+            actualizarCarritoUI();
+            showToast('Mezcla de granos personalizada agregada al carrito.', 'success');
+            toggleCart(); // Mostrar el carrito autom�ticamente
+        }
+
+        function agregarAlCarrito(prodId, nombre, precio, moliendaSelectId = null) {
+            let detalle = "";
+            if (moliendaSelectId) {
+                const opt = document.getElementById(moliendaSelectId);
+                detalle = `Molienda: ${opt.value}`;
+            }
+
+            // Buscar si ya existe el mismo producto con id�ntico detalle
+            const existe = carrito.find(item => item.id === prodId && item.detalle === detalle);
+
+            if (existe) {
+                existe.cantidad += 1;
+            } else {
+                carrito.push({
+                    id: prodId,
+                    nombre: nombre,
+                    detalle: detalle,
+                    precio: precio,
+                    cantidad: 1
+                });
+            }
+
+            actualizarCarritoUI();
+            showToast(`"${nombre}" se ha a�adido al carrito.`, 'success');
+        }
+
+        function eliminarDelCarrito(id, detalle) {
+            carrito = carrito.filter(item => !(item.id === id && item.detalle === detalle));
+            actualizarCarritoUI();
+            showToast('Producto removido del carrito.', 'success');
+        }
+
+        function actualizarCarritoUI() {
+            const badge = document.getElementById('cart-badge');
+            const itemsContainer = document.getElementById('cart-items');
+            const totalContainer = document.getElementById('cart-total');
+
+            // Calcular cantidades
+            const totalItems = carrito.reduce((acc, curr) => acc + curr.cantidad, 0);
+            const totalPrecio = carrito.reduce((acc, curr) => acc + (curr.precio * curr.cantidad), 0);
+
+            // Badge del icono
+            if (totalItems > 0) {
+                badge.innerText = totalItems;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+
+            // Renderizar items
+            if (carrito.length === 0) {
+                itemsContainer.innerHTML = `
+                    <div class="flex flex-col items-center justify-center h-full text-center text-[#8C7A6B]/80 py-20">
+                        <i data-lucide="shopping-cart" class="w-12 h-12 mb-3 text-[#D4C3B3]"></i>
+                        <p class="text-sm font-medium">�A�n no te has decidido?</p>
+                        <p class="text-xs mt-1">Nuestros caf�s tostados artesanalmente te esperan.</p>
+                    </div>
+                `;
+            } else {
+                itemsContainer.innerHTML = carrito.map(item => `
+                    <div class="p-3 bg-white border border-[#EADCC9] rounded-xl flex justify-between items-start text-xs relative group hover:border-[#4A3B32] transition-colors">
+                        <div class="space-y-1 pr-6">
+                            <h4 class="font-bold text-[#4A3B32]">${item.nombre}</h4>
+                            ${item.detalle ? `<p class="text-[10px] text-[#8C7A6B] leading-tight">${item.detalle}</p>` : ''}
+                            <div class="flex items-center space-x-2 pt-1 text-[#8C7A6B]">
+                                <span>Cant: ${item.cantidad}</span>
+                                <span>�</span>
+                                <span>Precio: $${item.precio.toFixed(2)}</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col justify-between items-end h-full">
+                            <button onclick="eliminarDelCarrito('${item.id}', '${item.detalle}')" class="text-gray-400 hover:text-rose-500 p-0.5" title="Eliminar">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                            <span class="font-mono font-bold text-[#A67C52] mt-4">$${(item.precio * item.cantidad).toFixed(2)}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            totalContainer.innerText = `$${totalPrecio.toFixed(2)}`;
+            lucide.createIcons();
+        }
+
+        function finalizarCompra() {
+            if (carrito.length === 0) {
+                showToast('Tu bolsa de compras est� vac�a. A�ade productos de nuestra tienda.', 'error');
+                return;
+            }
+
+            const total = carrito.reduce((acc, curr) => acc + (curr.precio * curr.cantidad), 0);
+            
+            // Simular cierre de compra exitoso
+            showToast(`�Pedido procesado con �xito! Total: $${total.toFixed(2)}. �Gracias por tu compra en OKINI!`, 'success');
+            
+            // Vaciar carrito
+            carrito = [];
+            actualizarCarritoUI();
+            toggleCart();
+        }
+    </script>
+</body>
+</html>

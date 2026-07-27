@@ -1,0 +1,26 @@
+//"Hazma una función para mi sitio web que reciba la cantidad de tazas que un cliente quiera reservar y me diga si puede reservar o no. 
+// La regla es que no puede reservar más de 2 tazas por persona."
+function puedeReservar(cantidadTazas, cantidadPersonas) {
+  // Validamos que los números sean razonables
+  if (cantidadTazas <= 0 || cantidadPersonas <= 0) {
+    return {
+      permitido: false,
+      mensaje: "La cantidad de tazas y personas debe ser mayor a 0."
+    };
+  }
+
+  // Calculamos el límite máximo permitido (2 tazas por persona)
+  const limiteMaximo = cantidadPersonas * 2;
+
+  if (cantidadTazas <= limiteMaximo) {
+    return {
+      permitido: true,
+      mensaje: `¡Reserva permitida! Puedes reservar hasta ${limiteMaximo} tazas para ${cantidadPersonas} persona(s).`
+    };
+  } else {
+    return {
+      permitido: false,
+      mensaje: `No es posible reservar. Para ${cantidadPersonas} persona(s), el límite es de ${limiteMaximo} tazas.`
+    };
+  }
+}
