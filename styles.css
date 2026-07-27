@@ -21,6 +21,11 @@ h2 {
     font-size: 2rem;
 }
 
+/* Y agregas esta regla para los h2 de la sección main */
+main h2 {
+    color: #301c11; /* Color café para los títulos del main */
+}
+
 header {
     padding: 1.5rem 2rem;
     border-bottom: 3px solid #01153a;
